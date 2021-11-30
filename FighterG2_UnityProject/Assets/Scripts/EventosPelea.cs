@@ -36,10 +36,15 @@ public class EventosPelea : MonoBehaviour
     public Slider barraEp1;
     public Slider barraEp2;
 
+    public TextMeshProUGUI vidasP1T;
+    public TextMeshProUGUI vidasP2T;
+    //Simbolo de vida
+    public string vidaStr;
+
     //Tiempos de resurrección
     private float rezTimerMax;
-    public float rezT1;
-    public float rezT2;
+    private float rezT1;
+    private float rezT2;
 
 
     
@@ -57,6 +62,9 @@ public class EventosPelea : MonoBehaviour
         rezTimerMax = 2f;
         rezT1 = rezTimerMax;
         rezT2 = rezTimerMax;
+
+        vidasP1T.text = RepresentarVidas(vidasP1);
+        vidasP2T.text = RepresentarVidas(vidasP2);
     }
     private void Update()
     {
@@ -66,13 +74,11 @@ public class EventosPelea : MonoBehaviour
         if (player1 == null && player1CanBeRespawned && rezT1 <= 0) {
             SpawnPlayer(1);
             player1CanBeRespawned = false;
-            vidasP1 -= 1;
             rezT1 = rezTimerMax;
         }
         if (player2 == null && player2CanBeRespawned && rezT2 <= 0) {
             SpawnPlayer(2);
             player2CanBeRespawned = false;
-            vidasP2 -= 1;
             rezT2 = rezTimerMax;
         }
         if (player1 != null)
@@ -92,7 +98,7 @@ public class EventosPelea : MonoBehaviour
     public void PlayerDead(GameObject player) {
         if (player == player2)
         {
-            if (vidasP2 <= 1 && victoryPlayer == 0) 
+            if (vidasP2 <= 1 && victoryPlayer == 0)
             {
                 // Gana el jugador 1
                 victoryPlayer = 1;
@@ -100,11 +106,16 @@ public class EventosPelea : MonoBehaviour
                 SceneManager.LoadScene("BEscenaVictoria");         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Cargar aquí la escena de victoria (gana jugador 1) Cambiar Menu por el nombre de la escena
             }
             else
-            player2CanBeRespawned = true;
+            {
+                player2 = null;
+                vidasP2 -= 1;
+                vidasP2T.text = RepresentarVidas(vidasP2);
+                player2CanBeRespawned = true;
+            }
         }
         else if (player == player1) 
         {
-            if (vidasP1 <= 1 && victoryPlayer == 0) 
+            if (vidasP1 <= 1 && victoryPlayer == 0)
             {
                 //Gana el jugador 2
                 victoryPlayer = 2;
@@ -112,31 +123,45 @@ public class EventosPelea : MonoBehaviour
                 SceneManager.LoadScene("DEscenaVictoria");         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Cargar aquí la escena de vicoria (gana jugador 2) Cambiar Menu por el nombre de la escena
             }
             else
-            player1CanBeRespawned = true;
+            {
+                player1 = null;
+                vidasP1 -= 1;
+                vidasP1T.text = RepresentarVidas(vidasP1);
+                player1CanBeRespawned = true;
+            }
         }
     }
 
     //Spawnea un jugador 
     public void SpawnPlayer(int pNum) {
-    //Lo hago en un switch por si en un futuro hay más de 2 personajes
-    switch (pNum)
-    {
-        case 1:
-            player1 = Instantiate(PrefP1, new Vector3(Random.Range(spawnP1.x, spawnP2.x), spawnP1.y, 0), new Quaternion(0, 0, 0, 0));
-            player1.name = PrefP1.name;
-            break;
-        case 2:
-            player2 = Instantiate(PrefP2, new Vector3(Random.Range(spawnP1.x, spawnP2.x), spawnP2.y, 0), new Quaternion(0, 0, 0, 0));
-            player2.name = PrefP2.name;
-            break;
-        default:
-            print("No such a player");
-            break;
+        //Lo hago en un switch por si en un futuro hay más de 2 personajes
+        switch (pNum)
+        {
+            case 1:
+                player1 = Instantiate(PrefP1, new Vector3(Random.Range(spawnP1.x, spawnP2.x), spawnP1.y, 0), new Quaternion(0, 0, 0, 0));
+                player1.name = PrefP1.name;
+                break;
+            case 2:
+                player2 = Instantiate(PrefP2, new Vector3(Random.Range(spawnP1.x, spawnP2.x), spawnP2.y, 0), new Quaternion(0, 0, 0, 0));
+                player2.name = PrefP2.name;
+                break;
+            default:
+                print("No such a player");
+                break;
+        }
+
     }
 
-}
 
-    
+    public string RepresentarVidas(int n)
+    {
+        string res = "";
+        for (int i = 0; i < n; i++)
+        {
+            res += vidaStr;
+        }
+        return res;
+    }
     
     
 

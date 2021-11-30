@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Seguir : MonoBehaviour
@@ -20,8 +21,14 @@ public class Seguir : MonoBehaviour
                 target = transform.parent.gameObject.GetComponent<EventosPelea>().player1.transform;
             else if (playerN == 2) target = transform.parent.gameObject.GetComponent<EventosPelea>().player2.transform;
         }
-        catch (MissingReferenceException) {
+        catch (MissingReferenceException)
+        {
+            transform.position = new Vector3(0, 0, 0);
+        }
+        catch (NullReferenceException)
+        {
             transform.position = new Vector3(0, 0, 0);
         }
     }
+    
 }
