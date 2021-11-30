@@ -13,11 +13,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3232937310883335500, guid: 95c53a2906da24a47b3ec659ac6efbf7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 20.103115
       objectReference: {fileID: 0}
     - target: {fileID: 3232937310883335500, guid: 95c53a2906da24a47b3ec659ac6efbf7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3232937310883335500, guid: 95c53a2906da24a47b3ec659ac6efbf7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -105,6 +105,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 100
   hp: 0
+  esp: 0
+  generacionEspPasiva: 1
   atk: 0
   def: 0
   vel: 0

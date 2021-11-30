@@ -12,10 +12,16 @@ public class Seguir : MonoBehaviour
     // Start is called before the first frame update
     private void FixedUpdate()
     {
-        if (target != null)
-            transform.position = target.transform.position;
-        else if (playerN == 1) 
-            target = transform.parent.gameObject.GetComponent<EventosPelea>().player1.transform;
-        else if (playerN == 2) target = transform.parent.gameObject.GetComponent<EventosPelea>().player2.transform;
+        try
+        {
+            if (target != null)
+                transform.position = target.transform.position;
+            else if (playerN == 1)
+                target = transform.parent.gameObject.GetComponent<EventosPelea>().player1.transform;
+            else if (playerN == 2) target = transform.parent.gameObject.GetComponent<EventosPelea>().player2.transform;
+        }
+        catch (MissingReferenceException) {
+            transform.position = new Vector3(0, 0, 0);
+        }
     }
 }

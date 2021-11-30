@@ -27,13 +27,19 @@ public class EventosPelea : MonoBehaviour
     public int vidasP1;
     public int vidasP2;
 
-    //[Header("UI")]
+    [Header("UI")]
     //Vida de los personajes
     public TextMeshProUGUI hpTp1;
     public TextMeshProUGUI hpTp2;
 
     //Carga especial de los personajes
+    public Slider barraEp1;
+    public Slider barraEp2;
 
+    //Tiempos de resurrección
+    private float rezTimerMax;
+    public float rezT1;
+    public float rezT2;
 
 
     
@@ -47,23 +53,40 @@ public class EventosPelea : MonoBehaviour
         spawnP2 = player2.transform.position;
         hpTp1 = GameObject.Find("HPtextP1").GetComponent<TextMeshProUGUI>();
         hpTp2 = GameObject.Find("HPtextP2").GetComponent<TextMeshProUGUI>();
+
+        rezTimerMax = 2f;
+        rezT1 = rezTimerMax;
+        rezT2 = rezTimerMax;
     }
     private void Update()
     {
-        if (player1 == null && player1CanBeRespawned) {
+        if (rezT1 > 0 && player1 == null) rezT1 -= Time.deltaTime;
+        if (rezT2 > 0 && player2 == null) rezT2 -= Time.deltaTime;
+
+        if (player1 == null && player1CanBeRespawned && rezT1 <= 0) {
             SpawnPlayer(1);
             player1CanBeRespawned = false;
             vidasP1 -= 1;
+            rezT1 = rezTimerMax;
         }
-        if (player2 == null && player2CanBeRespawned) {
+        if (player2 == null && player2CanBeRespawned && rezT2 <= 0) {
             SpawnPlayer(2);
             player2CanBeRespawned = false;
             vidasP2 -= 1;
+            rezT2 = rezTimerMax;
         }
         if (player1 != null)
+        {
             hpTp1.text = player1.GetComponent<Atributos>().getHP().ToString() + "%";
+            barraEp1.value = (float) player1.GetComponent<Atributos>().getEsp();
+        }
         if (player2 != null)
+        {
             hpTp2.text = player2.GetComponent<Atributos>().getHP().ToString() + "%";
+            barraEp2.value = (float) player2.GetComponent<Atributos>().getEsp();
+            
+
+        }
     }
     //Cuando un jugador muere llama a esta función
     public void PlayerDead(GameObject player) {
@@ -95,22 +118,26 @@ public class EventosPelea : MonoBehaviour
 
     //Spawnea un jugador 
     public void SpawnPlayer(int pNum) {
-        //Lo hago en un switch por si en un futuro hay más de 2 personajes
-        switch (pNum) {
-            case 1:
-                player1 = Instantiate(PrefP1, spawnP1, new Quaternion(0, 0, 0, 0));
-                player1.name = PrefP1.name;
-                break;
-            case 2:
-                player2 = Instantiate(PrefP2, spawnP2, new Quaternion(0, 0, 0, 0));
-                player2.name = PrefP2.name;
-                break;
-            default:
-                print("No such a player");
-                break;
-        }
+    //Lo hago en un switch por si en un futuro hay más de 2 personajes
+    switch (pNum)
+    {
+        case 1:
+            player1 = Instantiate(PrefP1, new Vector3(Random.Range(spawnP1.x, spawnP2.x), spawnP1.y, 0), new Quaternion(0, 0, 0, 0));
+            player1.name = PrefP1.name;
+            break;
+        case 2:
+            player2 = Instantiate(PrefP2, new Vector3(Random.Range(spawnP1.x, spawnP2.x), spawnP2.y, 0), new Quaternion(0, 0, 0, 0));
+            player2.name = PrefP2.name;
+            break;
+        default:
+            print("No such a player");
+            break;
     }
 
+}
+
+    
+    
     
 
 }
