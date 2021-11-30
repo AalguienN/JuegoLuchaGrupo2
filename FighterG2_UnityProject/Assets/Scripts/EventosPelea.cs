@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 
 public class EventosPelea : MonoBehaviour
@@ -25,6 +27,15 @@ public class EventosPelea : MonoBehaviour
     public int vidasP1;
     public int vidasP2;
 
+    //[Header("UI")]
+    //Vida de los personajes
+    public TextMeshProUGUI hpTp1;
+    public TextMeshProUGUI hpTp2;
+
+    //Carga especial de los personajes
+
+
+
     
 
     // Victoria de jugador:                     (quien ha ganado?)
@@ -34,6 +45,8 @@ public class EventosPelea : MonoBehaviour
     {
         spawnP1 = player1.transform.position;
         spawnP2 = player2.transform.position;
+        hpTp1 = GameObject.Find("HPtextP1").GetComponent<TextMeshProUGUI>();
+        hpTp2 = GameObject.Find("HPtextP2").GetComponent<TextMeshProUGUI>();
     }
     private void Update()
     {
@@ -47,6 +60,10 @@ public class EventosPelea : MonoBehaviour
             player2CanBeRespawned = false;
             vidasP2 -= 1;
         }
+        if (player1 != null)
+            hpTp1.text = player1.GetComponent<Atributos>().getHP().ToString() + "%";
+        if (player2 != null)
+            hpTp2.text = player2.GetComponent<Atributos>().getHP().ToString() + "%";
     }
     //Cuando un jugador muere llama a esta función
     public void PlayerDead(GameObject player) {
@@ -94,18 +111,6 @@ public class EventosPelea : MonoBehaviour
         }
     }
 
-    //Limpieza de la escena para evitar errores
-    private void limpiar()
-    {
-        vidasP1 = -1;
-        vidasP2 = -1;
-        Destroy(player1);
-        Destroy(player2);
-    }
-
-    private void OnDestroy()
-    {
-        limpiar();
-    }
+    
 
 }
