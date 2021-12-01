@@ -11,9 +11,17 @@ public class Colision : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            if(this.gameObject.transform.position.x > 0){}
-            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2( direccion * potencia, 100));
-            collision.GetComponent<Atributos>().changeHP(daño);
+            if(this.gameObject.transform.position.x < collision.gameObject.transform.position.x)
+            {
+                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(1 * potencia, 100));
+                collision.GetComponent<Atributos>().changeHP(daño);
+            } else if (this.gameObject.transform.position.x > collision.gameObject.transform.position.x)
+                {
+                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1 * potencia, 100));
+                    collision.GetComponent<Atributos>().changeHP(daño); 
+                }
+
+            
         }
 
 

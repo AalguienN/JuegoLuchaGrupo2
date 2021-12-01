@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 3232937310883335507}
   - component: {fileID: 4542305470997028519}
   - component: {fileID: 1208050817228927660}
+  - component: {fileID: -3103504521947921519}
   m_Layer: 6
   m_Name: DogeP1
   m_TagString: Player
@@ -274,6 +275,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eacded6e5d98d34082993f0eff5cd4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3103504521947921519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3232937310883335506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02cada6753512c44cb338e6dcf20e693, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potencia: 0
+  "da\xF1o": 0
 --- !u!1 &4631469945916416412
 GameObject:
   m_ObjectHideFlags: 0
