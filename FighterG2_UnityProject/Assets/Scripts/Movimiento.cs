@@ -81,9 +81,9 @@ public class Movimiento : MonoBehaviour
                     }
                 
                 }
-                //Aquí el sonido
+                //Aquï¿½ el sonido
                 sfx.PlaySound("Jump1");
-                //Aquí la fuerza aplicada
+                //Aquï¿½ la fuerza aplicada
                 rb.AddForce(saltito * fuerzasalto, ForceMode2D.Force);
                 nsaltos = nsaltos + 1;
                 DisableS(stiempo);
