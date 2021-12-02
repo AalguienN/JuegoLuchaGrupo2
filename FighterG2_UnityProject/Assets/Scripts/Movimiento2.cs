@@ -123,6 +123,10 @@ public class Movimiento2 : MonoBehaviour
                 //Aquí el sonido
                 sfx.PlaySound("Jump1");
                 //Aquí la fuerza
+                if (nsaltos > 0)
+                {
+                    rb.velocity = Vector2.zero;//paramos la velocidad horizontal y vertical en el segundo salto
+                }
                 rb.AddForce(saltito * fuerzasalto, ForceMode2D.Force);
                 nsaltos = nsaltos + 1;
                 a.SetBool("Ground", false);
