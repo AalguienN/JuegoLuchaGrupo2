@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Colision : MonoBehaviour
 {
-    public float potencia;
+    public Vector2 potenciaV2;
     public float daño;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -13,11 +13,11 @@ public class Colision : MonoBehaviour
         {
             if(this.gameObject.transform.position.x < collision.gameObject.transform.position.x)
             {
-                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(1 * potencia, 100));
+                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(1 * potenciaV2.x, potenciaV2.y));
                 collision.GetComponent<Atributos>().changeHP(daño);
             } else if (this.gameObject.transform.position.x > collision.gameObject.transform.position.x)
                 {
-                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1 * potencia, 100));
+                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1 * potenciaV2.x, potenciaV2.y));
                     collision.GetComponent<Atributos>().changeHP(daño); 
                 }
 
