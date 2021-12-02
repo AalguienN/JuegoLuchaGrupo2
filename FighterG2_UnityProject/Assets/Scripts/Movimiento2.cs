@@ -25,6 +25,12 @@ public class Movimiento2 : MonoBehaviour
     [Header("Varios")]
     private Controls1 Input1;
     private Rigidbody2D rb;
+    public Animator a;
+
+    [Header("Golpes")]
+    public float td = 0.3f;
+    public float tf = 0.3f;
+    public float te = 0.5f;
 
     [Header("SFX")]
     public SFXScript sfx;
@@ -38,7 +44,39 @@ public class Movimiento2 : MonoBehaviour
 
     void FixedUpdate() ///////////////////////////////////////COSAS QUE SE EJECUTAN EN CADA FRAME///////////////////////////////////////////////
     {
+        if (rb.velocity.y == 0)
+        {
+            a.SetBool("Ground", true);
+        }
+        else
+        {
+            a.SetBool("Ground", false);
+        }
+        if (rb.velocity.x != 0)
+        {
+            a.SetBool("Hmove", true);
+        }
+        else
+        {
+            a.SetBool("Hmove", false);
+        }
+        if (rb.gravityScale == 0)
+        {
+            a.SetBool("pared", true);
 
+        }
+        else
+        {
+            if (pared == false)
+            {
+                a.SetBool("Pared", false);
+            }
+            else
+            {
+                a.SetBool("Pared", true);
+            }
+        }
+        a.SetFloat("VSpeed", rb.velocity.y);
         Move();
     }
 
@@ -85,12 +123,9 @@ public class Movimiento2 : MonoBehaviour
                 //Aquí el sonido
                 sfx.PlaySound("Jump1");
                 //Aquí la fuerza
-                if (nsaltos > 0)
-                {
-                    rb.velocity = Vector2.zero;//paramos la velocidad horizontal y vertical en el segundo salto
-                }
                 rb.AddForce(saltito * fuerzasalto, ForceMode2D.Force);
                 nsaltos = nsaltos + 1;
+                a.SetBool("Ground", false);
                 DisableS(stiempo);
             }
         }
@@ -103,14 +138,28 @@ public class Movimiento2 : MonoBehaviour
     }
     private void Punch(InputAction.CallbackContext c)////////////////GOLPE NORMAL/////////////////////////////////////////////////////////////
     {
+        OnDisable();
+        a.SetBool("GolpeD", true);
+        CancelInvoke("fpunch");
+        Invoke("fpunch", td);
 
     }
     private void PunchF(InputAction.CallbackContext c)///////////////GOLPE FUERTE/////////////////////////////////////////////////////
     {
-
+        OnDisable();
+        a.SetBool("GolpeF", true);
+        CancelInvoke("fpunchf");
+        Invoke("fpunchf", tf);
     }
     private void PunchE(InputAction.CallbackContext c)////////////////////ESPECIAL//////////////////////////////////////////////////////
     {
+
+        transform.localScale = new Vector3(0.8f, 0.65f, 0.65f);
+        a.SetBool("GolpeE", true);
+        OnDisable();
+        CancelInvoke("fpunche");
+        Invoke("fpunche", te);
+
 
     }
     ///////////////////////////                          HASTA AQUI VAN LAS ACCIONES AAAAAAAAAAAAAA                     //////////////////////////
@@ -124,6 +173,7 @@ public class Movimiento2 : MonoBehaviour
             {
                 rb.gravityScale = gpared;
                 pared = true;
+                a.SetBool("Pared", true);
             }
         }
     }
@@ -133,7 +183,9 @@ public class Movimiento2 : MonoBehaviour
         {
             rb.gravityScale = gravedad;
             pared = false;
+            a.SetBool("Pared", false);
         }
+
 
     }
 
@@ -176,5 +228,21 @@ public class Movimiento2 : MonoBehaviour
     {
         Input1.Disable();
     }
+    private void fpunch()
+    {
+        a.SetBool("GolpeD", false);
+        OnEnable();
+    }
+    private void fpunchf()
+    {
+        a.SetBool("GolpeF", false);
+        OnEnable();
 
+    }
+    private void fpunche()
+    {
+        a.SetBool("GolpeE", false);
+        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        OnEnable();
+    }
 }////////////////////////////////////ya dejo de gritar :)/////////////////////////////////////////////////////////////////////////////////////////////
