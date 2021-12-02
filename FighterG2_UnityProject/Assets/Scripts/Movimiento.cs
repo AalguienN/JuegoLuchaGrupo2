@@ -22,9 +22,16 @@ public class Movimiento : MonoBehaviour
     public float gravedad;
     public float diagonal = 1f;
 
+    [Header("Golpes")]
+    public float td = 0.3f;
+    public float tf = 0.3f;
+    public float te = 0.5f;
+
     [Header("Varios")]
     private Controls1 Input1;
     private Rigidbody2D rb;
+    public Animator a;
+    //public SpriteRenderer sr;
 
     [Header("SFX")]
     public SFXScript sfx;
@@ -32,20 +39,57 @@ public class Movimiento : MonoBehaviour
     void Start()///////////////////////////////////////COSAS QUE SE EJECUTAN AL EMPEZAR//////////////////////////////////////////////
     {
         rb = GetComponent<Rigidbody2D>();
+        a = GetComponent<Animator>();
         gravedad = rb.gravityScale;
         if (sfx == null) sfx = GameObject.Find("SFXManager").GetComponent<SFXScript>();
+        OnEnable();
     }
 
     void FixedUpdate() ///////////////////////////////////////COSAS QUE SE EJECUTAN EN CADA FRAME///////////////////////////////////////////////
     {
+  
+       
+        if (rb.velocity.y == 0){
+            a.SetBool("Ground", true);
+        }
+        else
+        {
+            a.SetBool("Ground", false);
+        }
+        if (rb.velocity.x != 0)
+        {
+            a.SetBool("Hmove", true);
+        }
+        else
+        {
+            a.SetBool("Hmove", false);
+        }
+        if (rb.gravityScale == 0)
+        {
+            a.SetBool("pared", true);
 
+        }
+        else
+        {
+            if (pared == false)
+            {
+                a.SetBool("Pared", false);
+            }
+            else
+            {
+                a.SetBool("Pared", true);
+            }
+        }
+        a.SetFloat("VSpeed", rb.velocity.y);
         Move();
+       
     }
 
     ////////////////////////////                           A PARTIR DE AQUI VAN LAS ACCIONES AAAAAAAAAAAAAA                ////////////////////////
 
     private void Move()         ///////////MOVERSE
     {
+        
         float mve = Input1.Player1.Move.ReadValue<float>();
         if (mirandoderecha ==true && mve < 0)
         {
@@ -84,8 +128,13 @@ public class Movimiento : MonoBehaviour
                 //Aquí el sonido
                 sfx.PlaySound("Jump1");
                 //Aquí la fuerza aplicada
+                if (nsaltos > 0)
+                {
+                    rb.velocity = Vector2.zero;//paramos la velocidad horizontal y vertical en el segundo salto
+                }
                 rb.AddForce(saltito * fuerzasalto, ForceMode2D.Force);
                 nsaltos = nsaltos + 1;
+                a.SetBool("Ground", false);
                 DisableS(stiempo);
             }
         }
@@ -94,18 +143,32 @@ public class Movimiento : MonoBehaviour
     }
     private void Crouch(InputAction.CallbackContext c)///////////////AGACHARSE  ??? ///////////////////////////////////////////////////////////
     {
-
+        
     }
     private void Punch(InputAction.CallbackContext c)////////////////GOLPE NORMAL/////////////////////////////////////////////////////////////
     {
+        OnDisable();
+        a.SetBool("GolpeD", true);
+        CancelInvoke("fpunch");
+        Invoke("fpunch", td);
 
     }
     private void PunchF(InputAction.CallbackContext c)///////////////GOLPE FUERTE/////////////////////////////////////////////////////
     {
-
+        OnDisable();
+        a.SetBool("GolpeF", true);
+        CancelInvoke("fpunchf");
+        Invoke("fpunchf", tf);
     }
     private void PunchE(InputAction.CallbackContext c)////////////////////ESPECIAL//////////////////////////////////////////////////////
     {
+        
+        transform.localScale = new Vector3(1.2f,1f,1f);
+        a.SetBool("GolpeE", true);
+        OnDisable();
+        CancelInvoke("fpunche");
+        Invoke("fpunche", te);
+
 
     }
     ///////////////////////////                          HASTA AQUI VAN LAS ACCIONES AAAAAAAAAAAAAA                     //////////////////////////
@@ -119,6 +182,7 @@ public class Movimiento : MonoBehaviour
             {
                 rb.gravityScale = gpared;
                 pared = true;
+                a.SetBool("Pared", true);
             }
         }
     }
@@ -128,7 +192,9 @@ public class Movimiento : MonoBehaviour
         {
             rb.gravityScale = gravedad ;
             pared = false;
+            a.SetBool("Pared", false);
         }
+        
 
     }
 
@@ -170,6 +236,27 @@ public class Movimiento : MonoBehaviour
     public void OnDisable()
     {
         Input1.Disable();
+    }
+
+    private void fpunch()
+    {
+        a.SetBool("GolpeD", false);
+        OnEnable();
+    }
+    private void fpunchf()
+    {
+        a.SetBool("GolpeF", false);
+        OnEnable();
+        
+    }
+    private void fpunche()
+    {
+
+        //GetComponent<GameObject>().transform.localScale = Vector3.one;
+       
+        a.SetBool("GolpeE", false);
+        transform.localScale = new Vector3 (0.6f,0.6f,0.6f);
+        OnEnable();
     }
 
 }////////////////////////////////////ya dejo de gritar :)/////////////////////////////////////////////////////////////////////////////////////////////
